@@ -1,0 +1,36 @@
+.task {
+  position: relative;
+}
+
+.task__delete {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+
+.task__info {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.task__title {
+  margin-left: 15px;
+  color: white;
+}
+
+.message-body {
+  padding: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .columns {
+    margin: 0;
+  }
+
+  .column {
+    padding: 0;
+  }
+}
+
+/*# sourceMappingURL=/style.0cb76823.css.map */

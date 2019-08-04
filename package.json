@@ -1,0 +1,25 @@
+{
+  "name": "alternativeschedule",
+  "version": "1.0.0",
+  "description": "Alternative Schedule version",
+  "main": "src/assets/scripts/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html --public-url ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SehenQQ/alternativeSchedule.git"
+  },
+  "author": "German",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SehenQQ/alternativeSchedule/issues"
+  },
+  "homepage": "https://github.com/SehenQQ/alternativeSchedule#readme",
+  "devDependencies": {
+    "parcel": "^1.12.3",
+    "sass": "^1.22.9"
+  }
+}
