@@ -118,23 +118,76 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"assets/scripts/index.js":[function(require,module,exports) {
-document.addEventListener('DOMContentLoaded', function () {
-  // Get all "navbar-burger" elements
-  var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0); // Check if there are any navbar burgers
-
-  if ($navbarBurgers.length > 0) {
-    // Add a click event on each of them
-    $navbarBurgers.forEach(function (el) {
-      el.addEventListener('click', function () {
-        // Get the target from the "data-target" attribute
-        var target = el.dataset.target;
-        var $target = document.getElementById(target); // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-
-        el.classList.toggle('is-active');
-        $target.classList.toggle('is-active');
+var scheduleApp = {
+  tasks: {},
+  elements: {
+    burger: document.querySelector('.navbar-burger'),
+    navBar: document.querySelector('#navbarSchedule'),
+    form: document.querySelector('.form'),
+    addTaskButton: document.querySelector('.add__task'),
+    tasksList: document.querySelector('.tasks')
+  },
+  handlers: {
+    burgerHandler: function burgerHandler() {
+      elem.burger.addEventListener('click', function () {
+        elem.burger.classList.toggle('is-active');
+        elem.navBar.classList.toggle('is-active');
       });
-    });
+    },
+    addTaskButtonHandler: function addTaskButtonHandler() {
+      elem.addTaskButton.addEventListener('click', handl.openForm);
+    },
+    openForm: function openForm() {
+      elem.form.classList.add('form_opened');
+      elem.addTaskButton.removeEventListener('click', handl.openForm);
+      elem.addTaskButton.addEventListener('click', handl.closeForm);
+      elem.form.addEventListener('submit', handl.formSubmit);
+      handl.buttonChange(true);
+    },
+    closeForm: function closeForm() {
+      elem.form.classList.remove('form_opened');
+      elem.addTaskButton.removeEventListener('click', handl.closeForm);
+      elem.addTaskButton.addEventListener('click', handl.openForm);
+      elem.form.removeEventListener('submit', handl.formSubmit);
+      handl.buttonChange();
+    },
+    buttonChange: function buttonChange(opened) {
+      elem.addTaskButton.textContent = opened ? 'Close Form' : 'Add Task';
+    },
+    formSubmit: function formSubmit() {
+      var inputs = document.forms.addTask.elements;
+      event.preventDefault();
+      console.log({
+        taskDay: inputs.taskDay.value,
+        taskTime: inputs.taskTime.value,
+        taskTitle: inputs.taskTitle.value,
+        taskMsg: inputs.taskMsg.value
+      });
+    },
+    taskSpoiler: function taskSpoiler() {
+      elem.tasksList.addEventListener('click', function (event) {
+        console.log(event.target);
+
+        if (event.target.classList.contains('task__spoiler')) {
+          var card = event.target.closest('.task');
+          var footer = card.querySelector('.task__footer');
+          footer.classList.toggle('visible');
+        }
+      });
+    }
+  },
+  startHandlers: function startHandlers() {
+    that = this;
+    elem = this.elements;
+    handl = this.handlers;
+    handl.burgerHandler();
+    handl.addTaskButtonHandler();
+    handl.taskSpoiler();
   }
+};
+var that, elem, handl;
+document.addEventListener('DOMContentLoaded', function () {
+  scheduleApp.startHandlers();
 });
 },{}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -164,7 +217,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53513" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50882" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

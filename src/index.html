@@ -14,19 +14,19 @@
   <div class="container">
     <nav class="box navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
-          <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+        <a class="navbar-item navbar__logo" href="/">
+          Schedule
         </a>
 
         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-          data-target="navbarBasicExample">
+          data-target="navbarSchedule">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </a>
       </div>
 
-      <div id="navbarBasicExample" class="navbar-menu">
+      <div id="navbarSchedule" class="navbar-menu">
         <div class="navbar-start">
           <a class="navbar-item">
             Home
@@ -73,59 +73,119 @@
         </div>
       </div>
     </nav>
+    <div class="info-box box">
+      <div class="buttons are-medium">
+        <a class="add__task button">Add Task</a>
+      </div>
+      <form class="form box column is-4" name="addTask">
+        <div class="field">
+          <label class="label">Day</label>
+          <div class="control">
+            <input class="input" type="date" placeholder="Task Day" name="taskDay">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Time</label>
+          <div class="control">
+            <input class="input" type="time" placeholder="Task Time" name="taskTime">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Title</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Task Title" name="taskTitle">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Message</label>
+          <div class="control">
+            <textarea class="textarea" placeholder="Task Message" name="taskMsg"></textarea>
+          </div>
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="form__submit-button button is-link">Submit</button>
+          </div>
+          <div class="control">
+            <button class="form__reset-button button is-text">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
     <div class="columns">
-      <div class="column is-6">
+      <div class="column is-4">
         <div class="box">
-
-
+          <div class="week">
+            <h6 class="week__day title is-6">Mon</h6>
+            <h6 class="week__day title is-6">Tue</h6>
+            <h6 class="week__day title is-6">Wed</h6>
+            <h6 class="week__day title is-6">Thu</h6>
+            <h6 class="week__day title is-6">Fri</h6>
+            <h6 class="week__day title is-6">Sat</h6>
+            <h6 class="week__day title is-6">Sun</h6>
+          </div>
+          <div class="days">
+            <a class="day"><span class="day__number day__number__before">1</span></a>
+            <a class="day"><span class="day__number day__number__before">2</span></a>
+            <a class="day"><span class="day__number day__number__has">3</span></a>
+            <a class="day"><span class="day__number">4</span></a>
+            <a class="day"><span class="day__number">5</span></a>
+            <a class="day"><span class="day__number">6</span></a>
+            <a class="day"><span class="day__number">7</span></a>
+          </div>
         </div>
       </div>
-      <div class="column is-6">
+      <div class="column is-8">
         <div class="box">
-          <article class="task message is-info">
-            <div class="message-header">
-              <div class="task__info">
+          <h5 class="title is-5">Upcoming events on Friday 21 September</h5>
+          <div class="tasks">
+            <div class="task card">
+              <header class="task__header card-header">
                 <a class="task__time button is-rounded">10:00</a>
-                <h5 class="task__title title is-5">Lorem, ipsum dolor.</h5>
+                <h6 class="task__header-title card-header-title">
+                  Component
+                </h6>
+                <i class="task__spoiler fas fa-angle-down"></i>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
+                </div>
               </div>
-              <button class="delete"></button>
+              <footer class="task__footer card-footer">
+                <a href="#" class="card-footer-item">Save</a>
+                <a href="#" class="card-footer-item">Edit</a>
+                <a href="#" class="card-footer-item">Delete</a>
+              </footer>
             </div>
-            <div class="message-body">
-              <a class="button is-info is-outlined">Oct 7</a>
-              <a class="button is-info is-outlined">Oct 9</a>
-              <a class="button is-info is-outlined">Oct 11</a>
-            </div>
-          </article>
 
-          <article class="task message is-info">
-            <div class="message-header">
-              <div class="task__info">
+            <div class="task card">
+              <header class="task__header card-header">
                 <a class="task__time button is-rounded">10:00</a>
-                <h5 class="task__title title is-5">Lorem, ipsum dolor.</h5>
+                <h6 class="task__header-title card-header-title">
+                  Component
+                </h6>
+                <div class="task__spoiler card-header-icon">
+                  <span class="icon">
+                    <i class="fas fa-angle-down"></i>
+                  </span>
+                </div>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
+                </div>
               </div>
-              <button class="delete"></button>
+              <footer class="task__footer card-footer">
+                <a href="#" class="card-footer-item">Save</a>
+                <a href="#" class="card-footer-item">Edit</a>
+                <a href="#" class="card-footer-item">Delete</a>
+              </footer>
             </div>
-            <div class="message-body">
-              <a class="button is-info is-outlined">Oct 7</a>
-              <a class="button is-info is-outlined">Oct 9</a>
-              <a class="button is-info is-outlined">Oct 11</a>
-            </div>
-          </article>
 
-          <article class="task message is-info">
-            <div class="message-header">
-              <div class="task__info">
-                <a class="task__time button is-rounded">10:00</a>
-                <h5 class="task__title title is-5">Lorem, ipsum dolor.</h5>
-              </div>
-              <button class="delete"></button>
-            </div>
-            <div class="message-body">
-              <a class="button is-info is-outlined">Oct 7</a>
-              <a class="button is-info is-outlined">Oct 9</a>
-              <a class="button is-info is-outlined">Oct 11</a>
-            </div>
-          </article>
+          </div>
 
         </div>
       </div>
@@ -134,6 +194,7 @@
 
   </div>
   <script src="assets/scripts/index.js"></script>
+  <script src="https://kit.fontawesome.com/2de0abf284.js"></script>
 </body>
 
 </html>
