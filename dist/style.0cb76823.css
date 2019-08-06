@@ -57,6 +57,24 @@
 .task__footer.visible {
   display: flex;
 }
+.task__save {
+  cursor: pointer;
+}
+.task__save:hover {
+  opacity: 0.7;
+}
+.task__edit {
+  cursor: pointer;
+}
+.task__edit:hover {
+  opacity: 0.7;
+}
+.task__delete {
+  cursor: pointer;
+}
+.task__delete:hover {
+  opacity: 0.7;
+}
 
 .message-body {
   padding: 15px;

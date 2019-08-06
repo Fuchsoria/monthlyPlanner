@@ -141,49 +141,8 @@
         <div class="box">
           <h5 class="title is-5">Upcoming events on Friday 21 September</h5>
           <div class="tasks">
-            <div class="task card">
-              <header class="task__header card-header">
-                <a class="task__time button is-rounded">10:00</a>
-                <h6 class="task__header-title card-header-title">
-                  Component
-                </h6>
-                <i class="task__spoiler fas fa-angle-down"></i>
-              </header>
-              <div class="card-content">
-                <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
-                </div>
-              </div>
-              <footer class="task__footer card-footer">
-                <a href="#" class="card-footer-item">Save</a>
-                <a href="#" class="card-footer-item">Edit</a>
-                <a href="#" class="card-footer-item">Delete</a>
-              </footer>
-            </div>
 
-            <div class="task card">
-              <header class="task__header card-header">
-                <a class="task__time button is-rounded">10:00</a>
-                <h6 class="task__header-title card-header-title">
-                  Component
-                </h6>
-                <div class="task__spoiler card-header-icon">
-                  <span class="icon">
-                    <i class="fas fa-angle-down"></i>
-                  </span>
-                </div>
-              </header>
-              <div class="card-content">
-                <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
-                </div>
-              </div>
-              <footer class="task__footer card-footer">
-                <a href="#" class="card-footer-item">Save</a>
-                <a href="#" class="card-footer-item">Edit</a>
-                <a href="#" class="card-footer-item">Delete</a>
-              </footer>
-            </div>
+
 
           </div>
 
@@ -193,6 +152,25 @@
 
 
   </div>
+  <template id="task-template">
+    <div class="task card">
+      <header class="task__header card-header">
+        <a class="task__time button is-rounded"></a>
+        <h6 class="task__header-title card-header-title">
+        </h6>
+        <i class="task__spoiler fas fa-angle-down"></i>
+      </header>
+      <div class="card-content">
+        <div class="content">
+        </div>
+      </div>
+      <footer class="task__footer card-footer">
+        <div class="task__save card-footer-item">Save</div>
+        <div class="task__edit card-footer-item">Edit</div>
+        <div class="task__delete card-footer-item">Delete</div>
+      </footer>
+    </div>
+  </template>
   <script src="assets/scripts/index.js"></script>
   <script src="https://kit.fontawesome.com/2de0abf284.js"></script>
 </body>

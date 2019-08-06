@@ -119,13 +119,29 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   return newRequire;
 })({"assets/scripts/index.js":[function(require,module,exports) {
 var scheduleApp = {
-  tasks: {},
+  tasks: [{
+    taskDay: "1990-01-01",
+    taskTime: "01:01",
+    taskTitle: "lul",
+    taskMsg: "lul"
+  }, {
+    taskDay: "1992-02-02",
+    taskTime: "02:02",
+    taskTitle: "kek",
+    taskMsg: "kek"
+  }, {
+    taskDay: "1994-01-01",
+    taskTime: "00:00",
+    taskTitle: "azaza",
+    taskMsg: "azaza"
+  }],
   elements: {
     burger: document.querySelector('.navbar-burger'),
     navBar: document.querySelector('#navbarSchedule'),
     form: document.querySelector('.form'),
     addTaskButton: document.querySelector('.add__task'),
-    tasksList: document.querySelector('.tasks')
+    tasksList: document.querySelector('.tasks'),
+    taskTemplate: document.querySelector('#task-template')
   },
   handlers: {
     burgerHandler: function burgerHandler() {
@@ -166,14 +182,53 @@ var scheduleApp = {
     },
     taskSpoiler: function taskSpoiler() {
       elem.tasksList.addEventListener('click', function (event) {
-        console.log(event.target);
-
         if (event.target.classList.contains('task__spoiler')) {
           var card = event.target.closest('.task');
           var footer = card.querySelector('.task__footer');
           footer.classList.toggle('visible');
         }
       });
+    }
+  },
+  taskPush: function taskPush(obj) {
+    this.tasks.push(obj);
+  },
+  taskGenerate: function taskGenerate(obj) {
+    var card = elem.taskTemplate.content.cloneNode(true);
+    var taskTime = card.querySelector('.task__time');
+    var taskTitle = card.querySelector('.task__header-title');
+    var taskMsg = card.querySelector('.content');
+    taskTime.textContent = obj.taskTime;
+    taskTitle.textContent = obj.taskTitle;
+    taskMsg.textContent = obj.taskMsg;
+    return card;
+  },
+  taskRender: function taskRender(card) {
+    elem.tasksList.appendChild(card);
+  },
+  renderAll: function renderAll() {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = this.tasks[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var task = _step.value;
+        this.taskRender(this.taskGenerate(task));
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
     }
   },
   startHandlers: function startHandlers() {
@@ -188,6 +243,7 @@ var scheduleApp = {
 var that, elem, handl;
 document.addEventListener('DOMContentLoaded', function () {
   scheduleApp.startHandlers();
+  scheduleApp.renderAll();
 });
 },{}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -217,7 +273,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50882" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51591" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
