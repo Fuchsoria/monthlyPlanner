@@ -119,22 +119,46 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   return newRequire;
 })({"assets/scripts/index.js":[function(require,module,exports) {
 var scheduleApp = {
-  tasks: [{
-    taskDay: "1990-01-01",
-    taskTime: "01:01",
-    taskTitle: "lul",
-    taskMsg: "lul"
-  }, {
-    taskDay: "1992-02-02",
-    taskTime: "02:02",
-    taskTitle: "kek",
-    taskMsg: "kek"
-  }, {
-    taskDay: "1994-01-01",
-    taskTime: "00:00",
-    taskTitle: "azaza",
-    taskMsg: "azaza"
-  }],
+  tasks: {
+    '1990-01-01': [{
+      taskDay: "1990-01-01",
+      taskId: 1,
+      taskTime: "01:01",
+      taskTitle: "lul",
+      taskMsg: "lul"
+    }, {
+      taskDay: "1990-01-01",
+      taskId: 2,
+      taskTime: "02:02",
+      taskTitle: "kek",
+      taskMsg: "kek"
+    }, {
+      taskDay: "1990-01-01",
+      taskId: 3,
+      taskTime: "00:00",
+      taskTitle: "azaza",
+      taskMsg: "azaza"
+    }],
+    '1995-05-05': [{
+      taskDay: "1995-05-05",
+      taskId: 4,
+      taskTime: "05:05",
+      taskTitle: "lul5",
+      taskMsg: "lul5"
+    }, {
+      taskDay: "1995-05-05",
+      taskId: 5,
+      taskTime: "06:06",
+      taskTitle: "kek6",
+      taskMsg: "kek6"
+    }, {
+      taskDay: "1995-05-05",
+      taskId: 6,
+      taskTime: "07:07",
+      taskTitle: "azaza7",
+      taskMsg: "azaza7"
+    }]
+  },
   elements: {
     burger: document.querySelector('.navbar-burger'),
     navBar: document.querySelector('#navbarSchedule'),
@@ -173,12 +197,13 @@ var scheduleApp = {
     formSubmit: function formSubmit() {
       var inputs = document.forms.addTask.elements;
       event.preventDefault();
-      console.log({
+      var obj = {
         taskDay: inputs.taskDay.value,
         taskTime: inputs.taskTime.value,
         taskTitle: inputs.taskTitle.value,
         taskMsg: inputs.taskMsg.value
-      });
+      };
+      that.taskPush(obj);
     },
     taskSpoiler: function taskSpoiler() {
       elem.tasksList.addEventListener('click', function (event) {
@@ -188,16 +213,36 @@ var scheduleApp = {
           footer.classList.toggle('visible');
         }
       });
+    },
+    taskRemove: function taskRemove() {
+      elem.tasksList.addEventListener('click', function (event) {
+        if (event.target.classList.contains('task__delete')) {
+          that.removeFromTasks(event.target);
+          that.removeElement(event.target);
+        }
+      });
     }
   },
   taskPush: function taskPush(obj) {
-    this.tasks.push(obj);
+    var task = Object.assign({
+      taskId: this.generateTaskId()
+    }, obj);
+
+    if (!this.tasks[obj.taskDay]) {
+      this.tasks[obj.taskDay] = [task];
+    } else {
+      this.tasks[obj.taskDay].push(task);
+    }
+
+    this.taskRender(this.taskGenerate(task));
   },
   taskGenerate: function taskGenerate(obj) {
-    var card = elem.taskTemplate.content.cloneNode(true);
+    var card = elem.taskTemplate.content.cloneNode(true).querySelector('.card');
     var taskTime = card.querySelector('.task__time');
     var taskTitle = card.querySelector('.task__header-title');
     var taskMsg = card.querySelector('.content');
+    card.setAttribute('task-id', obj.taskId);
+    card.setAttribute('task-date', obj.taskDay);
     taskTime.textContent = obj.taskTime;
     taskTitle.textContent = obj.taskTitle;
     taskMsg.textContent = obj.taskMsg;
@@ -206,13 +251,14 @@ var scheduleApp = {
   taskRender: function taskRender(card) {
     elem.tasksList.appendChild(card);
   },
-  renderAll: function renderAll() {
+  renderAll: function renderAll(date) {
+    var tasks = this.tasks[date];
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
 
     try {
-      for (var _iterator = this.tasks[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      for (var _iterator = tasks[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var task = _step.value;
         this.taskRender(this.taskGenerate(task));
       }
@@ -231,6 +277,24 @@ var scheduleApp = {
       }
     }
   },
+  removeFromTasks: function removeFromTasks(element) {
+    var card = element.closest('.card');
+    var date = card.getAttribute('task-date');
+    var id = card.getAttribute('task-id');
+    this.tasks[date] = this.tasks[date].filter(function (item) {
+      return item.taskId !== Number(id);
+    });
+  },
+  removeElement: function removeElement(element) {
+    element.closest('.card').remove();
+  },
+  removeAllElements: function removeAllElements() {
+    elem.tasksList.innerHTML = '';
+  },
+  latestTaskId: 6,
+  generateTaskId: function generateTaskId() {
+    return ++this.latestTaskId;
+  },
   startHandlers: function startHandlers() {
     that = this;
     elem = this.elements;
@@ -238,12 +302,13 @@ var scheduleApp = {
     handl.burgerHandler();
     handl.addTaskButtonHandler();
     handl.taskSpoiler();
+    handl.taskRemove();
   }
 };
 var that, elem, handl;
 document.addEventListener('DOMContentLoaded', function () {
   scheduleApp.startHandlers();
-  scheduleApp.renderAll();
+  scheduleApp.renderAll('1990-01-01');
 });
 },{}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -273,7 +338,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51591" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49452" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
