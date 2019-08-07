@@ -1,42 +1,46 @@
+'use strict';
+
+let that, elem, handl;
+
 const scheduleApp = {
   tasks: {
     '1990-01-01': [{
-      taskDay: "1990-01-01",
+      taskDay: '1990-01-01',
       taskId: 1,
-      taskTime: "01:01",
-      taskTitle: "lul",
-      taskMsg: "lul"
+      taskTime: '01:01',
+      taskTitle: 'lul',
+      taskMsg: 'lul',
     }, {
-      taskDay: "1990-01-01",
+      taskDay: '1990-01-01',
       taskId: 2,
-      taskTime: "02:02",
-      taskTitle: "kek",
-      taskMsg: "kek"
+      taskTime: '02:02',
+      taskTitle: 'kek',
+      taskMsg: 'kek'
     }, {
-      taskDay: "1990-01-01",
+      taskDay: '1990-01-01',
       taskId: 3,
-      taskTime: "00:00",
-      taskTitle: "azaza",
-      taskMsg: "azaza"
+      taskTime: '00:00',
+      taskTitle: 'azaza',
+      taskMsg: 'azaza'
     }],
     '1995-05-05': [{
-      taskDay: "1995-05-05",
+      taskDay: '1995-05-05',
       taskId: 4,
-      taskTime: "05:05",
-      taskTitle: "lul5",
-      taskMsg: "lul5"
+      taskTime: '05:05',
+      taskTitle: 'lul5',
+      taskMsg: 'lul5'
     }, {
-      taskDay: "1995-05-05",
+      taskDay: '1995-05-05',
       taskId: 5,
-      taskTime: "06:06",
-      taskTitle: "kek6",
-      taskMsg: "kek6"
+      taskTime: '06:06',
+      taskTitle: 'kek6',
+      taskMsg: 'kek6'
     }, {
-      taskDay: "1995-05-05",
+      taskDay: '1995-05-05',
       taskId: 6,
-      taskTime: "07:07",
-      taskTitle: "azaza7",
-      taskMsg: "azaza7"
+      taskTime: '07:07',
+      taskTitle: 'azaza7',
+      taskMsg: 'azaza7'
     }],
   },
   elements: {
@@ -163,7 +167,7 @@ const scheduleApp = {
   },
 };
 
-let that, elem, handl;
+
 
 document.addEventListener('DOMContentLoaded', () => {
   scheduleApp.startHandlers();
