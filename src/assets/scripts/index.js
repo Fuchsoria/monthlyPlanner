@@ -167,9 +167,97 @@ const scheduleApp = {
   },
 };
 
+const calendar = {
+  daysList: document.querySelector('.days'),
+  dayTemplate: document.querySelector('#day'),
+  now() {
+    return new Date();
+  },
+  createDate(dateStr) {
+    const dateArr = dateStr.split('-');
+    return new Date(dateArr[0], dateArr[2] - 1, dateArr[1]);
+  },
+  getCurrentDate(now) {
+    const date = now ? now : this.now();
+    const options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    };
+    const dateStr = date.toLocaleDateString('en-US', options);
+    const dateArr = dateStr.slice(-10).split('/');
+    const current = {
+      weekDay: dateStr.slice(0, -12),
+      day: dateArr[1],
+      month: dateArr[0],
+      year: dateArr[2],
+      formated() {
+        return `${this.year}-${this.day}-${this.month}`;
+      },
+    };
+    return current;
+  },
+  getMonthDaysCount(dateStr) {
+    const dateArr = dateStr.split('-');
+    return new Date(dateArr[0], dateArr[2], 0).getDate();
+  },
+  getFirstDayWeek(dateStr) {
+    const dateArr = dateStr.split('-');
+    const firstDay = new Date(dateArr[0], dateArr[2] - 1, 1);
+    return firstDay.toLocaleDateString('en-US', {
+      weekday: 'short'
+    });
+  },
+  renderDays() {
+    const nowObj = this.getCurrentDate();
+    const now = nowObj.formated();
+    const dayInWeekNum = {
+      Mon: 0,
+      Tue: 1,
+      Wed: 2,
+      Thu: 3,
+      Fri: 4,
+      Sat: 5,
+      Sun: 6,
+    };
+    const daysInMonth = this.getMonthDaysCount(now);
+    const startRenderAt = dayInWeekNum[this.getFirstDayWeek(now)];
+    console.log(now, startRenderAt, daysInMonth);
+    for (let i = 0; i < startRenderAt; i++) {
+      this.appendDay(this.createDay());
+    }
+    for (let i = 1; i <= daysInMonth; i++) {
+      this.appendDay(this.createDay(i, nowObj));
+    }
+  },
+  appendDay(element) {
+    this.daysList.appendChild(element);
+  },
+  createDay(number, obj) {
+    const dayElement = this.dayTemplate.content.cloneNode(true).querySelector('.day');
+    const dayNumber = dayElement.querySelector('.day__number');
 
+    if (number) {
+      dayNumber.textContent = number;
+      dayElement.setAttribute('date', `${obj.year}-${this.numberFormat(number)}-${obj.month}`);
+    } else {
+      dayNumber.classList.add('day__number__before', 'day__number__no-pointer');
+    }
+
+    return dayElement;
+  },
+  numberFormat(number) {
+    return number >= 10 ? number : `0${number}`;
+  },
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   scheduleApp.startHandlers();
   scheduleApp.renderAll('1990-01-01');
+  calendar.renderDays();
+  console.log(calendar.getCurrentDate(calendar.createDate('2019-01-02')));
+  console.log(calendar.getCurrentDate(calendar.createDate('2019-01-02')).formated());
+  console.log(calendar.getMonthDaysCount('2019-01-02'));
+  console.log(calendar.getFirstDayWeek('2019-01-02'));
 });

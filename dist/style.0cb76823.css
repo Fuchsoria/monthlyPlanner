@@ -91,13 +91,15 @@
 }
 
 .days {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto;
+  grid-gap: 5px;
 }
 
 .day {
   position: relative;
-  width: calc(100% / 7 - 5px);
+  width: 100%;
 }
 .day::before {
   content: "";
@@ -126,6 +128,9 @@
 .day__number.day__number__before {
   border: #ececec 1px solid;
   color: #ececec;
+}
+.day__number.day__number__no-pointer {
+  cursor: default;
 }
 
 .info-box {

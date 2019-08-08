@@ -118,45 +118,48 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"assets/scripts/index.js":[function(require,module,exports) {
+'use strict';
+
+var that, elem, handl;
 var scheduleApp = {
   tasks: {
     '1990-01-01': [{
-      taskDay: "1990-01-01",
+      taskDay: '1990-01-01',
       taskId: 1,
-      taskTime: "01:01",
-      taskTitle: "lul",
-      taskMsg: "lul"
+      taskTime: '01:01',
+      taskTitle: 'lul',
+      taskMsg: 'lul'
     }, {
-      taskDay: "1990-01-01",
+      taskDay: '1990-01-01',
       taskId: 2,
-      taskTime: "02:02",
-      taskTitle: "kek",
-      taskMsg: "kek"
+      taskTime: '02:02',
+      taskTitle: 'kek',
+      taskMsg: 'kek'
     }, {
-      taskDay: "1990-01-01",
+      taskDay: '1990-01-01',
       taskId: 3,
-      taskTime: "00:00",
-      taskTitle: "azaza",
-      taskMsg: "azaza"
+      taskTime: '00:00',
+      taskTitle: 'azaza',
+      taskMsg: 'azaza'
     }],
     '1995-05-05': [{
-      taskDay: "1995-05-05",
+      taskDay: '1995-05-05',
       taskId: 4,
-      taskTime: "05:05",
-      taskTitle: "lul5",
-      taskMsg: "lul5"
+      taskTime: '05:05',
+      taskTitle: 'lul5',
+      taskMsg: 'lul5'
     }, {
-      taskDay: "1995-05-05",
+      taskDay: '1995-05-05',
       taskId: 5,
-      taskTime: "06:06",
-      taskTitle: "kek6",
-      taskMsg: "kek6"
+      taskTime: '06:06',
+      taskTitle: 'kek6',
+      taskMsg: 'kek6'
     }, {
-      taskDay: "1995-05-05",
+      taskDay: '1995-05-05',
       taskId: 6,
-      taskTime: "07:07",
-      taskTitle: "azaza7",
-      taskMsg: "azaza7"
+      taskTime: '07:07',
+      taskTitle: 'azaza7',
+      taskMsg: 'azaza7'
     }]
   },
   elements: {
@@ -305,10 +308,100 @@ var scheduleApp = {
     handl.taskRemove();
   }
 };
-var that, elem, handl;
+var calendar = {
+  daysList: document.querySelector('.days'),
+  dayTemplate: document.querySelector('#day'),
+  now: function now() {
+    return new Date();
+  },
+  createDate: function createDate(dateStr) {
+    var dateArr = dateStr.split('-');
+    return new Date(dateArr[0], dateArr[2] - 1, dateArr[1]);
+  },
+  getCurrentDate: function getCurrentDate(now) {
+    var date = now ? now : this.now();
+    var options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    };
+    var dateStr = date.toLocaleDateString('en-US', options);
+    var dateArr = dateStr.slice(-10).split('/');
+    var current = {
+      weekDay: dateStr.slice(0, -12),
+      day: dateArr[1],
+      month: dateArr[0],
+      year: dateArr[2],
+      formated: function formated() {
+        return "".concat(this.year, "-").concat(this.day, "-").concat(this.month);
+      }
+    };
+    return current;
+  },
+  getMonthDaysCount: function getMonthDaysCount(dateStr) {
+    var dateArr = dateStr.split('-');
+    return new Date(dateArr[0], dateArr[2], 0).getDate();
+  },
+  getFirstDayWeek: function getFirstDayWeek(dateStr) {
+    var dateArr = dateStr.split('-');
+    var firstDay = new Date(dateArr[0], dateArr[2] - 1, 1);
+    return firstDay.toLocaleDateString('en-US', {
+      weekday: 'short'
+    });
+  },
+  renderDays: function renderDays() {
+    var nowObj = this.getCurrentDate();
+    var now = nowObj.formated();
+    var dayInWeekNum = {
+      Mon: 0,
+      Tue: 1,
+      Wed: 2,
+      Thu: 3,
+      Fri: 4,
+      Sat: 5,
+      Sun: 6
+    };
+    var daysInMonth = this.getMonthDaysCount(now);
+    var startRenderAt = dayInWeekNum[this.getFirstDayWeek(now)];
+    console.log(now, startRenderAt, daysInMonth);
+
+    for (var i = 0; i < startRenderAt; i++) {
+      this.appendDay(this.createDay());
+    }
+
+    for (var _i = 1; _i <= daysInMonth; _i++) {
+      this.appendDay(this.createDay(_i, nowObj));
+    }
+  },
+  appendDay: function appendDay(element) {
+    this.daysList.appendChild(element);
+  },
+  createDay: function createDay(number, obj) {
+    var dayElement = this.dayTemplate.content.cloneNode(true).querySelector('.day');
+    var dayNumber = dayElement.querySelector('.day__number');
+
+    if (number) {
+      dayNumber.textContent = number;
+      dayElement.setAttribute('date', "".concat(obj.year, "-").concat(this.numberFormat(number), "-").concat(obj.month));
+    } else {
+      dayNumber.classList.add('day__number__before', 'day__number__no-pointer');
+    }
+
+    return dayElement;
+  },
+  numberFormat: function numberFormat(number) {
+    return number >= 10 ? number : "0".concat(number);
+  }
+};
 document.addEventListener('DOMContentLoaded', function () {
   scheduleApp.startHandlers();
   scheduleApp.renderAll('1990-01-01');
+  calendar.renderDays();
+  console.log(calendar.getCurrentDate(calendar.createDate('2019-01-02')));
+  console.log(calendar.getCurrentDate(calendar.createDate('2019-01-02')).formated());
+  console.log(calendar.getMonthDaysCount('2019-01-02'));
+  console.log(calendar.getFirstDayWeek('2019-01-02'));
 });
 },{}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -338,7 +431,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49452" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42639" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
