@@ -211,6 +211,9 @@ const calendar = {
   },
   renderDays() {
     const nowObj = this.getCurrentDate();
+    // const prevMonth = `${nowObj.year}-01-${--W(nowObj.month)}`;
+    // // const nextMonth = `${nowObj.year}-01-${++nowObj.month}`;
+    // const prevMonthDays = this.getMonthDaysCount(prevMonth);
     const now = nowObj.formated();
     const dayInWeekNum = {
       Mon: 0,
@@ -224,6 +227,7 @@ const calendar = {
     const daysInMonth = this.getMonthDaysCount(now);
     const startRenderAt = dayInWeekNum[this.getFirstDayWeek(now)];
     for (let i = 0; i < startRenderAt; i++) {
+      // this.appendDay(this.createDay(prevMonthDays - i));
       this.appendDay(this.createDay());
     }
     for (let i = 1; i <= daysInMonth; i++) {

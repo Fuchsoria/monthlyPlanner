@@ -351,7 +351,10 @@ var calendar = {
     });
   },
   renderDays: function renderDays() {
-    var nowObj = this.getCurrentDate();
+    var nowObj = this.getCurrentDate(); // const prevMonth = `${nowObj.year}-01-${--W(nowObj.month)}`;
+    // // const nextMonth = `${nowObj.year}-01-${++nowObj.month}`;
+    // const prevMonthDays = this.getMonthDaysCount(prevMonth);
+
     var now = nowObj.formated();
     var dayInWeekNum = {
       Mon: 0,
@@ -364,9 +367,9 @@ var calendar = {
     };
     var daysInMonth = this.getMonthDaysCount(now);
     var startRenderAt = dayInWeekNum[this.getFirstDayWeek(now)];
-    console.log(now, startRenderAt, daysInMonth);
 
     for (var i = 0; i < startRenderAt; i++) {
+      // this.appendDay(this.createDay(prevMonthDays - i));
       this.appendDay(this.createDay());
     }
 
@@ -398,10 +401,6 @@ document.addEventListener('DOMContentLoaded', function () {
   scheduleApp.startHandlers();
   scheduleApp.renderAll('1990-01-01');
   calendar.renderDays();
-  console.log(calendar.getCurrentDate(calendar.createDate('2019-01-02')));
-  console.log(calendar.getCurrentDate(calendar.createDate('2019-01-02')).formated());
-  console.log(calendar.getMonthDaysCount('2019-01-02'));
-  console.log(calendar.getFirstDayWeek('2019-01-02'));
 });
 },{}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -431,7 +430,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42639" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36755" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
