@@ -223,7 +223,6 @@ const calendar = {
     };
     const daysInMonth = this.getMonthDaysCount(now);
     const startRenderAt = dayInWeekNum[this.getFirstDayWeek(now)];
-    console.log(now, startRenderAt, daysInMonth);
     for (let i = 0; i < startRenderAt; i++) {
       this.appendDay(this.createDay());
     }
@@ -256,8 +255,4 @@ document.addEventListener('DOMContentLoaded', () => {
   scheduleApp.startHandlers();
   scheduleApp.renderAll('1990-01-01');
   calendar.renderDays();
-  console.log(calendar.getCurrentDate(calendar.createDate('2019-01-02')));
-  console.log(calendar.getCurrentDate(calendar.createDate('2019-01-02')).formated());
-  console.log(calendar.getMonthDaysCount('2019-01-02'));
-  console.log(calendar.getFirstDayWeek('2019-01-02'));
 });
