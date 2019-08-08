@@ -120,42 +120,50 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"assets/scripts/index.js":[function(require,module,exports) {
 'use strict';
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 var that, elem, handl;
 var scheduleApp = {
   tasks: {
-    '1990-01-01': [{
-      taskDay: '1990-01-01',
+    '2019-08-15': [{
+      taskDay: '2019-08-15',
       taskId: 1,
       taskTime: '01:01',
       taskTitle: 'lul',
       taskMsg: 'lul'
     }, {
-      taskDay: '1990-01-01',
+      taskDay: '2019-08-15',
       taskId: 2,
       taskTime: '02:02',
       taskTitle: 'kek',
       taskMsg: 'kek'
     }, {
-      taskDay: '1990-01-01',
+      taskDay: '2019-08-15',
       taskId: 3,
       taskTime: '00:00',
       taskTitle: 'azaza',
       taskMsg: 'azaza'
     }],
-    '1995-05-05': [{
-      taskDay: '1995-05-05',
+    '2019-08-31': [{
+      taskDay: '2019-08-31',
       taskId: 4,
       taskTime: '05:05',
       taskTitle: 'lul5',
       taskMsg: 'lul5'
     }, {
-      taskDay: '1995-05-05',
+      taskDay: '2019-08-31',
       taskId: 5,
       taskTime: '06:06',
       taskTitle: 'kek6',
       taskMsg: 'kek6'
     }, {
-      taskDay: '1995-05-05',
+      taskDay: '2019-08-31',
       taskId: 6,
       taskTime: '07:07',
       taskTitle: 'azaza7',
@@ -166,9 +174,11 @@ var scheduleApp = {
     burger: document.querySelector('.navbar-burger'),
     navBar: document.querySelector('#navbarSchedule'),
     form: document.querySelector('.form'),
+    formResetButton: document.querySelector('.form__reset-button'),
     addTaskButton: document.querySelector('.add__task'),
     tasksList: document.querySelector('.tasks'),
-    taskTemplate: document.querySelector('#task-template')
+    taskTemplate: document.querySelector('#task-template'),
+    daysList: document.querySelector('.days')
   },
   handlers: {
     burgerHandler: function burgerHandler() {
@@ -222,6 +232,28 @@ var scheduleApp = {
         if (event.target.classList.contains('task__delete')) {
           that.removeFromTasks(event.target);
           that.removeElement(event.target);
+          handl.daysStatusUpdate();
+        }
+      });
+    },
+    daysHandler: function daysHandler() {
+      elem.daysList.addEventListener('click', function (event) {
+        if (event.target.classList.contains('day__number')) {
+          var day = event.target.closest('.day');
+          that.removeAllElements();
+          that.renderAll(day.getAttribute('date'));
+        }
+      });
+    },
+    daysStatusUpdate: function daysStatusUpdate() {
+      _toConsumableArray(elem.daysList.children).forEach(function (item) {
+        var dayNumber = item.querySelector('.day__number');
+        var date = that.tasks[item.getAttribute('date')];
+
+        if (date && date.length > 0) {
+          dayNumber.classList.add('day__number__has');
+        } else {
+          dayNumber.classList.remove('day__number__has');
         }
       });
     }
@@ -238,6 +270,7 @@ var scheduleApp = {
     }
 
     this.taskRender(this.taskGenerate(task));
+    handl.daysStatusUpdate();
   },
   taskGenerate: function taskGenerate(obj) {
     var card = elem.taskTemplate.content.cloneNode(true).querySelector('.card');
@@ -255,29 +288,33 @@ var scheduleApp = {
     elem.tasksList.appendChild(card);
   },
   renderAll: function renderAll(date) {
-    var tasks = this.tasks[date];
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+    if (this.tasks[date]) {
+      var tasks = this.tasks[date];
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-    try {
-      for (var _iterator = tasks[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var task = _step.value;
-        this.taskRender(this.taskGenerate(task));
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          _iterator.return();
+        for (var _iterator = tasks[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var task = _step.value;
+          this.taskRender(this.taskGenerate(task));
         }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
       } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
         }
       }
+    } else {
+      console.log('Нет предметов на этот день');
     }
   },
   removeFromTasks: function removeFromTasks(element) {
@@ -306,6 +343,8 @@ var scheduleApp = {
     handl.addTaskButtonHandler();
     handl.taskSpoiler();
     handl.taskRemove();
+    handl.daysHandler();
+    handl.daysStatusUpdate();
   }
 };
 var calendar = {
@@ -316,7 +355,7 @@ var calendar = {
   },
   createDate: function createDate(dateStr) {
     var dateArr = dateStr.split('-');
-    return new Date(dateArr[0], dateArr[2] - 1, dateArr[1]);
+    return new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
   },
   getCurrentDate: function getCurrentDate(now) {
     var date = now ? now : this.now();
@@ -334,27 +373,27 @@ var calendar = {
       month: dateArr[0],
       year: dateArr[2],
       formated: function formated() {
-        return "".concat(this.year, "-").concat(this.day, "-").concat(this.month);
+        return "".concat(this.year, "-").concat(this.month, "-").concat(this.day);
       }
     };
     return current;
   },
   getMonthDaysCount: function getMonthDaysCount(dateStr) {
     var dateArr = dateStr.split('-');
-    return new Date(dateArr[0], dateArr[2], 0).getDate();
+    return new Date(dateArr[0], dateArr[1], 0).getDate();
   },
   getFirstDayWeek: function getFirstDayWeek(dateStr) {
     var dateArr = dateStr.split('-');
-    var firstDay = new Date(dateArr[0], dateArr[2] - 1, 1);
+    var firstDay = new Date(dateArr[0], dateArr[1] - 1, 1);
     return firstDay.toLocaleDateString('en-US', {
       weekday: 'short'
     });
   },
   renderDays: function renderDays() {
-    var nowObj = this.getCurrentDate(); // const prevMonth = `${nowObj.year}-01-${--W(nowObj.month)}`;
-    // // const nextMonth = `${nowObj.year}-01-${++nowObj.month}`;
-    // const prevMonthDays = this.getMonthDaysCount(prevMonth);
+    var nowObj = this.getCurrentDate();
+    var prevMonth = "".concat(nowObj.year, "-").concat(--Object.assign({}, nowObj).month, "-01"); // const nextMonth = `${nowObj.year}-${++Object.assign({}, nowObj).month}-01`;
 
+    var prevMonthDays = this.getMonthDaysCount(prevMonth);
     var now = nowObj.formated();
     var dayInWeekNum = {
       Mon: 0,
@@ -368,9 +407,8 @@ var calendar = {
     var daysInMonth = this.getMonthDaysCount(now);
     var startRenderAt = dayInWeekNum[this.getFirstDayWeek(now)];
 
-    for (var i = 0; i < startRenderAt; i++) {
-      // this.appendDay(this.createDay(prevMonthDays - i));
-      this.appendDay(this.createDay());
+    for (var i = startRenderAt - 1; i >= 0; i--) {
+      this.appendDay(this.createDay(prevMonthDays - i));
     }
 
     for (var _i = 1; _i <= daysInMonth; _i++) {
@@ -383,10 +421,10 @@ var calendar = {
   createDay: function createDay(number, obj) {
     var dayElement = this.dayTemplate.content.cloneNode(true).querySelector('.day');
     var dayNumber = dayElement.querySelector('.day__number');
+    dayNumber.textContent = number;
 
-    if (number) {
-      dayNumber.textContent = number;
-      dayElement.setAttribute('date', "".concat(obj.year, "-").concat(this.numberFormat(number), "-").concat(obj.month));
+    if (obj) {
+      dayElement.setAttribute('date', "".concat(obj.year, "-").concat(obj.month, "-").concat(this.numberFormat(number)));
     } else {
       dayNumber.classList.add('day__number__before', 'day__number__no-pointer');
     }
@@ -398,9 +436,8 @@ var calendar = {
   }
 };
 document.addEventListener('DOMContentLoaded', function () {
-  scheduleApp.startHandlers();
-  scheduleApp.renderAll('1990-01-01');
   calendar.renderDays();
+  scheduleApp.startHandlers();
 });
 },{}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -430,7 +467,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36755" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50736" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
