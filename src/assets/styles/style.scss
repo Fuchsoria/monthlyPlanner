@@ -61,6 +61,15 @@
     &.visible {
       display: flex;
     }
+
+    &-item_disabled {
+      cursor: default !important;
+      opacity: 0.5 !important;
+
+      &:hover {
+        opacity: 0.5 !important;
+      }
+    }
   }
 
   &__save {
@@ -87,6 +96,8 @@
     }
   }
 }
+
+
 
 .message-body {
   padding: 15px;

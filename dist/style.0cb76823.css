@@ -57,6 +57,13 @@
 .task__footer.visible {
   display: flex;
 }
+.task__footer-item_disabled {
+  cursor: default !important;
+  opacity: 0.5 !important;
+}
+.task__footer-item_disabled:hover {
+  opacity: 0.5 !important;
+}
 .task__save {
   cursor: pointer;
 }

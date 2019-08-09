@@ -105,10 +105,10 @@
 
         <div class="field is-grouped">
           <div class="control">
-            <button class="form__submit-button button is-link">Submit</button>
+            <button type="submit" class="form__submit-button button is-link">Submit</button>
           </div>
           <div class="control">
-            <button class="form__reset-button button is-text">Reset</button>
+            <button type="reset" class="form__reset-button button is-text">Reset</button>
           </div>
         </div>
       </form>
@@ -131,7 +131,7 @@
       </div>
       <div class="column is-8">
         <div class="box">
-          <h5 class="title is-5">Upcoming events on Friday 21 September</h5>
+          <h5 class="tasks__title title is-5">Select day</h5>
           <div class="tasks">
 
 
@@ -157,8 +157,8 @@
         </div>
       </div>
       <footer class="task__footer card-footer">
-        <div class="task__save card-footer-item">Save</div>
-        <div class="task__edit card-footer-item">Edit</div>
+        <div class="task__save task__footer-item_disabled card-footer-item" disabled="">Save</div>
+        <div class="task__edit task__footer-item_disabled card-footer-item" disabled="">Edit</div>
         <div class="task__delete card-footer-item">Delete</div>
       </footer>
     </div>

@@ -1,6 +1,108 @@
 'use strict';
 
-let that, elem, handl;
+let main, elem, handl;
+
+const calendar = {
+  daysList: document.querySelector('.days'),
+  dayTemplate: document.querySelector('#day'),
+  now() {
+    return new Date();
+  },
+  createDate(dateStr) {
+    const dateArr = dateStr.split('-');
+    return new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
+  },
+  getCurrentDate(now) {
+    const date = now ? now : this.now();
+    const options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    };
+    const dateStr = date.toLocaleDateString('en-US', options);
+    const dateArr = dateStr.slice(-10).split('/');
+    const current = {
+      weekDay: dateStr.slice(0, -12),
+      day: dateArr[1],
+      month: dateArr[0],
+      year: dateArr[2],
+      formated() {
+        return `${this.year}-${this.month}-${this.day}`;
+      },
+    };
+    return current;
+  },
+  getMonthDaysCount(dateStr) {
+    const dateArr = dateStr.split('-');
+    return new Date(dateArr[0], dateArr[1], 0).getDate();
+  },
+  getFirstDayWeek(dateStr) {
+    const dateArr = dateStr.split('-');
+    const firstDay = new Date(dateArr[0], dateArr[1] - 1, 1);
+    return firstDay.toLocaleDateString('en-US', {
+      weekday: 'short'
+    });
+  },
+  getTitleDate(date) {
+    const options = {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    };
+    const dateStr = date.toLocaleDateString('en-US', options);
+    const dateArr = dateStr.replace(/,/gi, '').split(' ');
+    const dateObj = {
+      weekDay: dateArr[0],
+      day: dateArr[2],
+      month: dateArr[1],
+    };
+    return dateObj;
+  },
+  renderDays() {
+    const nowObj = this.getCurrentDate();
+
+    const prevMonth = `${nowObj.year}-${--Object.assign({}, nowObj).month}-01`;
+    // const nextMonth = `${nowObj.year}-${++Object.assign({}, nowObj).month}-01`;
+    const prevMonthDays = this.getMonthDaysCount(prevMonth);
+    const now = nowObj.formated();
+    const dayInWeekNum = {
+      Mon: 0,
+      Tue: 1,
+      Wed: 2,
+      Thu: 3,
+      Fri: 4,
+      Sat: 5,
+      Sun: 6,
+    };
+    const daysInMonth = this.getMonthDaysCount(now);
+    const startRenderAt = dayInWeekNum[this.getFirstDayWeek(now)];
+    for (let i = startRenderAt - 1; i >= 0; i--) {
+      this.appendDay(this.createDay(prevMonthDays - i));
+    }
+    for (let i = 1; i <= daysInMonth; i++) {
+      this.appendDay(this.createDay(i, nowObj));
+    }
+  },
+  appendDay(element) {
+    this.daysList.appendChild(element);
+  },
+  createDay(number, obj) {
+    const dayElement = this.dayTemplate.content.cloneNode(true).querySelector('.day');
+    const dayNumber = dayElement.querySelector('.day__number');
+    dayNumber.textContent = number;
+    if (obj) {
+      dayElement.setAttribute('date', `${obj.year}-${obj.month}-${this.numberFormat(number)}`);
+    } else {
+      dayNumber.classList.add('day__number__before', 'day__number__no-pointer');
+    }
+
+    return dayElement;
+  },
+  numberFormat(number) {
+    return number >= 10 ? number : `0${number}`;
+  },
+};
 
 const scheduleApp = {
   tasks: {
@@ -52,6 +154,7 @@ const scheduleApp = {
     tasksList: document.querySelector('.tasks'),
     taskTemplate: document.querySelector('#task-template'),
     daysList: document.querySelector('.days'),
+    tasksTitle: document.querySelector('.tasks__title'),
   },
   handlers: {
     burgerHandler() {
@@ -75,6 +178,7 @@ const scheduleApp = {
       elem.addTaskButton.removeEventListener('click', handl.closeForm);
       elem.addTaskButton.addEventListener('click', handl.openForm);
       elem.form.removeEventListener('submit', handl.formSubmit);
+      elem.form.reset();
       handl.buttonChange();
     },
     buttonChange(opened) {
@@ -89,7 +193,13 @@ const scheduleApp = {
         taskTitle: inputs.taskTitle.value,
         taskMsg: inputs.taskMsg.value
       };
-      that.taskPush(obj);
+      main.taskPush(obj);
+      if (main.currentDay === obj.taskDay) {
+        main.removeAllElements();
+        main.renderAll(obj.taskDay);
+        handl.tasksTitleUpdate(obj.taskDay, true);
+      }
+      handl.closeForm();
     },
     taskSpoiler() {
       elem.tasksList.addEventListener('click', (event) => {
@@ -103,31 +213,54 @@ const scheduleApp = {
     taskRemove() {
       elem.tasksList.addEventListener('click', (event) => {
         if (event.target.classList.contains('task__delete')) {
-          that.removeFromTasks(event.target);
-          that.removeElement(event.target);
+          main.removeFromTasks(event.target);
+          main.removeElement(event.target);
           handl.daysStatusUpdate();
         }
       });
     },
+    currentDay: '',
     daysHandler() {
       elem.daysList.addEventListener('click', (event) => {
-        if (event.target.classList.contains('day__number')) {
+        if (event.target.classList.contains('day__number') &&
+          !event.target.classList.contains('day__number__before')) {
           const day = event.target.closest('.day');
-          that.removeAllElements();
-          that.renderAll(day.getAttribute('date'));
+          const date = day.getAttribute('date');
+          main.removeAllElements();
+          main.renderAll(date);
+          main.currentDay = date;
+          const dateExist = main.tasks[date];
+          if (dateExist && dateExist.length > 0) {
+            handl.tasksTitleUpdate(date, true);
+          } else {
+            handl.tasksTitleUpdate(date, false);
+          }
         }
       });
     },
     daysStatusUpdate() {
       [...elem.daysList.children].forEach((item) => {
         const dayNumber = item.querySelector('.day__number');
-        const date = that.tasks[item.getAttribute('date')];
-        if (date && date.length > 0) {
+        // const date = item.getAttribute('date');
+        const dateExist = main.tasks[item.getAttribute('date')];
+        if (dateExist && dateExist.length > 0) {
           dayNumber.classList.add('day__number__has');
+        } else if (dateExist && dateExist.length === 0) {
+          dayNumber.classList.remove('day__number__has');
         } else {
           dayNumber.classList.remove('day__number__has');
         }
       });
+    },
+    tasksTitleUpdate(date, exist) {
+      const dateObj = calendar.getTitleDate(calendar.createDate(date));
+      if (exist) {
+        elem.tasksTitle.textContent =
+          `Your Tasks on ${dateObj.weekDay} ${dateObj.day} ${dateObj.month}`;
+      } else {
+        elem.tasksTitle.textContent =
+          `You have no tasks on ${dateObj.weekDay} ${dateObj.day} ${dateObj.month}`;
+      }
     },
   },
   taskPush(obj) {
@@ -139,7 +272,6 @@ const scheduleApp = {
     } else {
       this.tasks[obj.taskDay].push(task);
     }
-    this.taskRender(this.taskGenerate(task));
     handl.daysStatusUpdate();
   },
   taskGenerate(obj) {
@@ -163,8 +295,6 @@ const scheduleApp = {
       for (const task of tasks) {
         this.taskRender(this.taskGenerate(task));
       }
-    } else {
-      console.log('Нет предметов на этот день');
     }
   },
   removeFromTasks(element) {
@@ -184,7 +314,7 @@ const scheduleApp = {
     return ++this.latestTaskId;
   },
   startHandlers() {
-    that = this;
+    main = this;
     elem = this.elements;
     handl = this.handlers;
 
@@ -197,92 +327,7 @@ const scheduleApp = {
   },
 };
 
-const calendar = {
-  daysList: document.querySelector('.days'),
-  dayTemplate: document.querySelector('#day'),
-  now() {
-    return new Date();
-  },
-  createDate(dateStr) {
-    const dateArr = dateStr.split('-');
-    return new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
-  },
-  getCurrentDate(now) {
-    const date = now ? now : this.now();
-    const options = {
-      weekday: 'long',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    };
-    const dateStr = date.toLocaleDateString('en-US', options);
-    const dateArr = dateStr.slice(-10).split('/');
-    const current = {
-      weekDay: dateStr.slice(0, -12),
-      day: dateArr[1],
-      month: dateArr[0],
-      year: dateArr[2],
-      formated() {
-        return `${this.year}-${this.month}-${this.day}`;
-      },
-    };
-    return current;
-  },
-  getMonthDaysCount(dateStr) {
-    const dateArr = dateStr.split('-');
-    return new Date(dateArr[0], dateArr[1], 0).getDate();
-  },
-  getFirstDayWeek(dateStr) {
-    const dateArr = dateStr.split('-');
-    const firstDay = new Date(dateArr[0], dateArr[1] - 1, 1);
-    return firstDay.toLocaleDateString('en-US', {
-      weekday: 'short'
-    });
-  },
-  renderDays() {
-    const nowObj = this.getCurrentDate();
 
-    const prevMonth = `${nowObj.year}-${--Object.assign({}, nowObj).month}-01`;
-    // const nextMonth = `${nowObj.year}-${++Object.assign({}, nowObj).month}-01`;
-    const prevMonthDays = this.getMonthDaysCount(prevMonth);
-    const now = nowObj.formated();
-    const dayInWeekNum = {
-      Mon: 0,
-      Tue: 1,
-      Wed: 2,
-      Thu: 3,
-      Fri: 4,
-      Sat: 5,
-      Sun: 6,
-    };
-    const daysInMonth = this.getMonthDaysCount(now);
-    const startRenderAt = dayInWeekNum[this.getFirstDayWeek(now)];
-    for (let i = startRenderAt - 1; i >= 0; i--) {
-      this.appendDay(this.createDay(prevMonthDays - i));
-    }
-    for (let i = 1; i <= daysInMonth; i++) {
-      this.appendDay(this.createDay(i, nowObj));
-    }
-  },
-  appendDay(element) {
-    this.daysList.appendChild(element);
-  },
-  createDay(number, obj) {
-    const dayElement = this.dayTemplate.content.cloneNode(true).querySelector('.day');
-    const dayNumber = dayElement.querySelector('.day__number');
-    dayNumber.textContent = number;
-    if (obj) {
-      dayElement.setAttribute('date', `${obj.year}-${obj.month}-${this.numberFormat(number)}`);
-    } else {
-      dayNumber.classList.add('day__number__before', 'day__number__no-pointer');
-    }
-
-    return dayElement;
-  },
-  numberFormat(number) {
-    return number >= 10 ? number : `0${number}`;
-  },
-};
 
 document.addEventListener('DOMContentLoaded', () => {
   calendar.renderDays();
