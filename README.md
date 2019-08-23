@@ -1,2 +1,2 @@
-# alternativeSchedule
-Alternative Schedule version
+# Monthly Planner
+Monthly Planner version
