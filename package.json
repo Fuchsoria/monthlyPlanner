@@ -20,6 +20,6 @@
   "homepage": "https://github.com/SehenQQ/alternativeSchedule#readme",
   "devDependencies": {
     "parcel": "^1.12.3",
-    "sass": "^1.22.9"
+    "sass": "^1.22.10"
   }
 }
