@@ -238,39 +238,39 @@ var scheduleApp = {
       taskDay: '2019-08-15',
       taskId: 1,
       taskTime: '01:01',
-      taskTitle: 'lul',
-      taskMsg: 'lul'
+      taskTitle: 'First',
+      taskMsg: 'First'
     }, {
       taskDay: '2019-08-15',
       taskId: 2,
       taskTime: '02:02',
-      taskTitle: 'kek',
-      taskMsg: 'kek'
+      taskTitle: 'Second',
+      taskMsg: 'Second'
     }, {
       taskDay: '2019-08-15',
       taskId: 3,
       taskTime: '00:00',
-      taskTitle: 'azaza',
-      taskMsg: 'azaza'
+      taskTitle: 'Third',
+      taskMsg: 'Third'
     }],
     '2019-08-31': [{
       taskDay: '2019-08-31',
       taskId: 4,
       taskTime: '05:05',
-      taskTitle: 'lul5',
-      taskMsg: 'lul5'
+      taskTitle: 'First2',
+      taskMsg: 'First2'
     }, {
       taskDay: '2019-08-31',
       taskId: 5,
       taskTime: '06:06',
-      taskTitle: 'kek6',
-      taskMsg: 'kek6'
+      taskTitle: 'Second2',
+      taskMsg: 'Second2'
     }, {
       taskDay: '2019-08-31',
       taskId: 6,
       taskTime: '07:07',
-      taskTitle: 'azaza7',
-      taskMsg: 'azaza7'
+      taskTitle: 'Third3',
+      taskMsg: 'Third3'
     }]
   },
   elements: {
@@ -511,7 +511,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52417" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52296" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
