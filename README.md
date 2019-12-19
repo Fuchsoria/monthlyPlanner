@@ -1,21 +1,22 @@
 # Monthly Planner
-![image](https://raw.githubusercontent.com/SehenQQ/sehenqq.github.io/3c65571f016ae52d2e1d3631822491457cb7905f/monthlyplanner/screenshot.png)
 
-## Quick start
-For quick start you need already installed nodejs and npm.
+## Install
+To install, you must have installed nodejs and npm.
 
-Save project local on you storage:
+Clone the project to your computer.
 
-    git clone https://github.com/SehenQQ/monthlyPlanner.git
+    git clone <project link>
 
-In root directory use follow commands:
+In the root of the project, through the console / terminal, run the command:
 
     npm install
-### After success installation you can use follow commands: 
+### After a successful installation, the following commands will be available:
 Local server with development mode:
 
     npm run dev
 Build production version:
 
     npm run build
-
+Deploy build on gh-pages:
+  
+    npm run deploy
